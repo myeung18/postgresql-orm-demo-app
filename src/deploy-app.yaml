@@ -1,0 +1,52 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: crdb-quarkus-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crdb-quarkus-app
+  template:
+    metadata:
+      labels:
+        app: crdb-quarkus-app
+        deploymentconfig: crdb-quarkus-app
+    spec:
+      containers:
+        - name: crdb-quarkus-app
+          image: quay.io/myeung/cockroachdb-quickstart:v0.1
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          imagePullPolicy: Always
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: crdb-quarkus-app
+  name: crdb-quarkus-app
+spec:
+  ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: crdb-quarkus-app
+    deploymentconfig: crdb-quarkus-app
+  type: ClusterIP
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app: crdb-quarkus-app
+  name: crdb-quarkus-app
+spec:
+  to:
+    kind: Service
+    name: crdb-quarkus-app

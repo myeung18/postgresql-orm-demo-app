@@ -18,6 +18,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
+import io.agroal.api.AgroalDataSource;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
@@ -31,6 +32,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class FruitResource {
 
     private static final Logger LOGGER = Logger.getLogger(FruitResource.class.getName());
+
+    @Inject
+    AgroalDataSource defaultDataSource;
 
     @Inject
     EntityManager entityManager;
