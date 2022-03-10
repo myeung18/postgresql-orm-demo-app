@@ -35,44 +35,24 @@ public class PostgreSqlServiceBindingConverter implements ServiceBindingConverte
         StringBuilder sslparam = new StringBuilder();
         String sslmode = binding.getProperties().getOrDefault("sslmode", "");
         String sslRootCert = binding.getProperties().getOrDefault("sslrootcert", "");
-        if (!"".equals(sslRootCert) && !"".equals(sslmode)) {
-            boolean hasSslMode = true;
-            switch (sslmode) {
-                case "allow":
-                case "prefer":
-                case "require":
-                case "verify-ca":
-                case "verify-full":
-                    break;
-                default:
-                    hasSslMode = false;
-                    break;
-            }
-            if (hasSslMode) {
-                sslparam.append("sslmode=").append(sslmode).append("&");
-                sslparam.append("sslrootcert=").append(sslRootCert);
-            }
+        if (!"".equals(sslmode)) {
+            sslparam.append("sslmode=").append(sslmode);
+        }
+        if (!"".equals(sslRootCert)) {
+            String and = "";
+            if (!"".equals(sslmode)) and = "&";
+            sslparam.append(and + "sslrootcert=")
+                    .append(binding.getBindingDirectory() + "/" + sslRootCert);
         }
 
-        //process optional parameters
-        //e.g.: option-cluster => '--cluster=host_name"
-        //      option-other=> '-c other=othervalue"
-        // -> "options=--cluster=host_name -c other=othervalue"
-        StringBuilder opt = new StringBuilder();
-        for (Map.Entry<String, String> ent : binding.getProperties().entrySet()) {
-            if (ent.getKey().startsWith("option-")) {
-                opt.append(" ").append(ent.getValue());
-            }
-        }
-
-        String options = "";
+        String options = binding.getProperties().getOrDefault("options", "");
         try {
-            options = opt.length() > 0 ? "options=" + encoding(opt.substring(1)).replace("+", "%20") : "";
+            options = options.length() > 0 ? "options=" + encoding(options.substring(1)).replace("+", "%20") : "";
         } catch (Exception e) {
-            throw new IllegalArgumentException("failed to encode options params" + opt, e);
+            throw new IllegalArgumentException("failed to encode options params" + options, e);
         }
 
-        if (sslparam.length() > 0 && opt.length() > 0) {
+        if (sslparam.length() > 0 && options.length() > 0) {
             options = sslparam + "&" + options;
         } else if (sslparam.length() > 0) {
             options = sslparam.toString();
