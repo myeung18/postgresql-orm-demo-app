@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: crdb-quarkus-app
-          image: quay.io/myeung/cockroachdb-quickstart:v0.1
+          image: quay.io/myeung/cockroachdb-quickstart:v0.2
           ports:
             - containerPort: 8080
               protocol: TCP
