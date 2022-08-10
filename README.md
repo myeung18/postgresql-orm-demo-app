@@ -1,4 +1,4 @@
-# Quarkus demo app for CockraochDB cloud and PostgreSQL: Hibernate ORM and RESTEasy
+# Quarkus (Hibernate ORM and RESTEasy) demo app for PostgreSQL compatible databases
 
 ## Requirements
 
