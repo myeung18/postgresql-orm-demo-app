@@ -25,6 +25,9 @@ public class Fruit {
     @Column(length = 40, unique = true)
     private String name;
 
+    @Column(length = 10)
+    private String quantity;
+
     public Fruit() {
     }
 
@@ -46,6 +49,14 @@ public class Fruit {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 
 }

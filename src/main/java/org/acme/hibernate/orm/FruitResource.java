@@ -81,6 +81,7 @@ public class FruitResource {
         }
 
         entity.setName(fruit.getName());
+        entity.setQuantity(fruit.getQuantity());
 
         return entity;
     }
